@@ -1,0 +1,325 @@
+/* ============================================================
+   layout.css — overall app shell layout: toolbar, tab bar,
+   main area, editor pane, side pane, AI panel, status bar.
+   Flat solid layers with hairline separation.
+   ============================================================ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+/* ---------- Toolbar ---------- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--toolbar-h);
+  padding: 0 10px;
+  background: var(--color-bg-elev);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  z-index: var(--z-toolbar);
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+
+.toolbar-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border);
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.toolbar-group-attach {
+  margin-left: auto; /* pushed to the right in LTR */
+}
+
+/* In focus mode the toolbar is hidden. */
+.app[data-view="focus"] .toolbar { display: none; }
+.app[data-view="focus"] .tabbar { display: none; }
+.app[data-view="focus"] #statusbar { display: none; }
+
+/* ---------- Tab bar ---------- */
+.tabbar {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  height: var(--tabbar-h);
+  padding: 4px 8px 0;
+  background: var(--color-bg-elev2);
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  flex-shrink: 0;
+  z-index: var(--z-tabbar);
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  min-width: 120px;
+  max-width: 240px;
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  border-radius: 9px 9px 0 0;
+  background: transparent;
+  color: var(--color-text-dim);
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: background var(--anim-fast) var(--ease), color var(--anim-fast) var(--ease),
+              border-color var(--anim-fast) var(--ease);
+}
+
+.tab::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background var(--anim-fast) var(--ease);
+}
+
+.tab:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+.tab.active {
+  background: var(--color-editor-bg);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  box-shadow: 0 -1px 3px -1px rgba(0, 0, 0, 0.06);
+}
+
+.tab.active::before { background: var(--color-accent); }
+
+.tab .tab-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab .tab-dirty {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-text-dim);
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--anim-fast);
+}
+
+.tab.dirty .tab-dirty { opacity: 1; background: var(--color-accent); }
+
+.tab .tab-close {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-dim);
+  opacity: 0;
+  transition: opacity var(--anim-fast), background var(--anim-fast), color var(--anim-fast);
+}
+
+.tab:hover .tab-close, .tab.active .tab-close { opacity: 1; }
+.tab-close:hover { background: var(--color-bg-active); color: var(--color-text); }
+
+/* ---------- Main area ---------- */
+.main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: var(--color-bg);
+}
+
+/* ---------- Editor pane ---------- */
+.editor-pane {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+}
+
+.viewport {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  outline: none;
+  background: var(--color-editor-bg);
+  cursor: text;
+}
+
+/* ---------- Gutter ---------- */
+.gutter {
+  flex-shrink: 0;
+  width: var(--gutter-w);
+  background: var(--color-gutter-bg);
+  border-right: 1px solid var(--color-border);
+  overflow: hidden;
+  user-select: none;
+  position: relative;
+}
+
+/* ---------- Side pane (outline / preview) ---------- */
+.sidepane {
+  flex-shrink: 0;
+  width: var(--sidepane-w);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-elev);
+  border-left: 1px solid var(--color-border);
+  overflow: hidden;
+  z-index: var(--z-sidepane);
+  transition: width var(--anim-med) var(--ease);
+}
+
+.sidepane .pane-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ---------- Status bar ---------- */
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--status-h);
+  padding: 0 14px;
+  background: var(--color-bg-elev);
+  border-top: 1px solid var(--color-border);
+  font-size: 12px;
+  color: var(--color-text-dim);
+  flex-shrink: 0;
+  z-index: var(--z-status);
+  user-select: none;
+}
+
+.status-item { white-space: nowrap; }
+
+.status-sep { width: 1px; height: 12px; background: var(--color-border); }
+
+.status-spacer { flex: 1; }
+
+.status-save { transition: color var(--anim-fast); }
+.status-save.saving { color: var(--color-warning); }
+.status-save.saved { color: var(--color-success); }
+.status-save.error { color: var(--color-error); }
+
+/* ---------- Overlay (shortcut modal) ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 12, 18, 0.5);
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayIn var(--anim-med) var(--ease);
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- Toasts ---------- */
+.toasts {
+  position: fixed;
+  bottom: calc(var(--status-h) + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toasts);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--color-bg-elev);
+  color: var(--color-text);
+  box-shadow: var(--shadow-2);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13px;
+  max-width: 80vw;
+  pointer-events: auto;
+  animation: toastIn var(--anim-med) var(--ease);
+}
+
+.toast.error { background: var(--color-error-bg); color: var(--color-error); border-color: var(--color-error); }
+.toast.success { background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success); }
+.toast.warning { background: var(--color-warning-bg); color: var(--color-warning); border-color: var(--color-warning); }
+
+.toast.out { animation: toastOut var(--anim-fast) var(--ease) forwards; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(8px) scale(0.96); }
+}
+
+/* ---------- Focus exit button ---------- */
+#focus-exit {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  cursor: zoom-out;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  :root {
+    --sidepane-w: 260px;
+    --panel-w: 300px;
+  }
+  .sidepane { position: absolute; right: 0; top: 0; bottom: 0; box-shadow: var(--shadow-2); }
+}
+
+@media (max-width: 640px) {
+  .sidebar-hidden-label { display: none; }
+  .gutter { display: none; }
+  .status-item:nth-last-child(n+3):not(#status-save):not(#status-lncol) { display: none; }
+}
+
+@media (max-width: 480px) {
+  .toolbar { gap: 0; }
+  .toolbar-sep { margin: 0 3px; }
+}

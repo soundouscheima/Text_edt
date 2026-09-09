@@ -1,0 +1,64 @@
+/* ============================================================
+   rtl.css — mirroring rules applied when `dir="rtl"`.
+   The editor content renders its own direction via per-line
+   `unicode-bidi: plaintext`, but the *chrome* mirrors here.
+   ============================================================ */
+
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+/* Mirror the toolbar's spacer group */
+html[dir="rtl"] .toolbar-group-attach { margin-left: 0; margin-right: auto; }
+
+/* Tabs: accent indicator slides to the other side */
+html[dir="rtl"] .tab { border-right: none; border-left: 1px solid var(--color-border); }
+html[dir="rtl"] .tab.active::before { left: 0; right: 0; }
+
+/* AI panel slides in from the left in RTL */
+html[dir="rtl"] .ai-panel {
+  border-left: none;
+  border-right: 1px solid var(--color-border);
+  transform: translateX(-110%);
+}
+html[dir="rtl"] .ai-panel.open { transform: translateX(0); }
+
+/* Side pane sits on the right in RTL */
+html[dir="rtl"] .sidepane { border-left: none; border-right: 1px solid var(--color-border); }
+
+/* Find bar anchors to the left in RTL */
+html[dir="rtl"] .findbar { left: 10px; right: auto; }
+
+/* Gutter numbers align to the left edge with the text margin in RTL */
+html[dir="rtl"] .gutter { border-right: none; border-left: 1px solid var(--color-border); }
+html[dir="rtl"] .gutter-num { right: auto; left: 12px; text-align: left; }
+
+/* Mirror directional icons (arrows point opposite in RTL) */
+html[dir="rtl"] .btn.ai-mirror svg { transform: scaleX(-1); }
+
+/* Overlay modal scrollbars */
+html[dir="rtl"] .modal-body { direction: rtl; }
+
+/* Table alignment for shortcut cheat-sheet */
+html[dir="rtl"] .kbd-table th, html[dir="rtl"] .kbd-table td { text-align: right; }
+
+/* RTL selection rects: the selection highlight is anchored from the
+   *right* edge. Overridden by renderer via inline styles for mixed runs;
+   this handles pure-RTL lines. */
+html[dir="rtl"] .sel-rect { transform-origin: right center; }
+
+/* Input proxy must not mirror — it's position:absolute and 1px,
+   but ensure caret-direction doesn't drift it. */
+html[dir="rtl"] .input-proxy { direction: ltr; }
+
+/* Tooltips should flip from their left offset in RTL mode */
+html[dir="rtl"] [data-tip]::after { left: auto; right: 50%; transform: translateX(50%) translateY(-4px); }
+html[dir="rtl"] [data-tip]:hover::after { transform: translateX(50%) translateY(0); }
+
+/* Chat bubbles: user messages right, assistant messages left in RTL */
+html[dir="rtl"] .ai-msg.user { align-self: flex-start; align-items: flex-start; }
+html[dir="rtl"] .ai-msg.assistant { align-self: flex-end; align-items: flex-end; }
+html[dir="rtl"] .ai-msg.user .ai-msg-bubble { border-bottom-left-radius: 4px; border-bottom-right-radius: 12px; }
+html[dir="rtl"] .ai-msg.assistant .ai-msg-bubble { border-bottom-right-radius: 4px; border-bottom-left-radius: 12px; }
+
+/* Status bar item order: flex already flips with dir. */

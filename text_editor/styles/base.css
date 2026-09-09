@@ -1,0 +1,202 @@
+/* ============================================================
+   base.css — CSS reset, design tokens (custom properties),
+   base element styling, accessibility helpers.
+
+   Design language: "Basalt" — flat, solid, precise. No frosted
+   glass, no gradient blobs. Every surface is a crisp layer with
+   hairline borders; focus lives on the text itself.
+   ============================================================ */
+
+/* ---------- Reset ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-ui);
+  color: var(--color-text);
+  background: var(--color-bg-solid);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-variant-ligatures: none;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+textarea, input {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-selection-bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+body:not(.using-keyboard) :focus-visible {
+  outline: none;
+}
+
+/* ---------- Design tokens (light theme = default) ---------- */
+:root {
+  /* Typography */
+  --font-ui: 'Segoe UI', 'System UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --font-editor: 'JetBrains Mono', 'Fira Code', Consolas, 'SF Mono', Menlo, 'Courier New', monospace;
+  --font-editor-ar: 'Noto Naskh Arabic', 'Amiri', 'Cairo', 'Segoe UI', 'JetBrains Mono', Consolas, monospace;
+  --font-size-ui: 13.5px;
+  --font-size-editor: 16px;
+  --font-size-line-num: 11.5px;
+
+  /* Spacing */
+  --toolbar-h: 46px;
+  --tabbar-h: 36px;
+  --status-h: 26px;
+  --gutter-w: 46px;
+  --panel-w: 340px;
+  --sidepane-w: 300px;
+  --findbar-h: 54px;
+
+  /* Editor metrics */
+  --line-height: 1.5;
+  --editor-pad: 8px;
+
+  /* Z-index scale */
+  --z-lines: 1;
+  --z-selection: 2;
+  --z-caret: 3;
+  --z-findbar: 10;
+  --z-status: 20;
+  --z-tabbar: 30;
+  --z-toolbar: 40;
+  --z-sidepane: 45;
+  --z-ai-panel: 50;
+  --z-overlay: 100;
+  --z-toasts: 110;
+  --z-tour: 120;
+
+  /* Motion */
+  --anim-fast: 120ms;
+  --anim-med: 220ms;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ---------- Light theme tokens ---------- */
+:root {
+  --color-bg-solid: #eef1f5;
+  --color-bg: #f8fafc;
+  --color-bg-elev: #ffffff;
+  --color-bg-elev2: #f4f6fa;
+  --color-editor-bg: #ffffff;
+  --color-bg-hover: rgba(30, 58, 82, 0.06);
+  --color-bg-active: rgba(30, 58, 82, 0.11);
+
+  --color-text: #1b2634;
+  --color-text-dim: #5d6b7e;
+  --color-border: rgba(28, 48, 71, 0.14);
+  --color-border-strong: rgba(28, 48, 71, 0.24);
+
+  --color-accent: #0e9483;
+  --color-accent-rgb: 14, 148, 131;
+  --accent-gradient: linear-gradient(135deg, #0e9483, #16b8a0 55%, #14b8c2);
+  --color-accent-soft: rgba(14, 148, 131, 0.12);
+  --color-accent-text: #ffffff;
+
+  --color-selection-bg: rgba(14, 148, 131, 0.26);
+  --color-caret: #0e7a8f;
+  --color-gutter-text: #9aa7b8;
+  --color-gutter-bg: #f4f6fa;
+  --color-current-line: rgba(14, 148, 131, 0.07);
+
+  --color-error: #d64545;
+  --color-error-bg: rgba(214, 69, 69, 0.1);
+  --color-success: #16805a;
+  --color-success-bg: rgba(22, 128, 90, 0.12);
+  --color-warning: #b06a11;
+  --color-warning-bg: rgba(240, 168, 62, 0.18);
+
+  --color-find-match: rgba(255, 193, 84, 0.5);
+  --color-find-match-active: rgba(255, 151, 40, 0.72);
+
+  --color-ai-user-msg: linear-gradient(135deg, #0e9483, #16b8a0);
+  --color-ai-user-msg-bg: rgba(14, 148, 131, 0.12);
+  --color-ai-assistant-msg: #ffffff;
+
+  --color-scrollbar: rgba(60, 80, 105, 0.28);
+  --color-scrollbar-hover: rgba(60, 80, 105, 0.48);
+
+  --shadow-1: 0 1px 2px rgba(24, 39, 58, 0.06), 0 1px 3px rgba(24, 39, 58, 0.05);
+  --shadow-2: 0 12px 34px rgba(24, 39, 58, 0.14), 0 2px 8px rgba(24, 39, 58, 0.08);
+  --shadow-glow: 0 6px 22px rgba(14, 148, 131, 0.3);
+
+  --color-markdown-code: rgba(28, 48, 71, 0.07);
+  --color-markdown-blockquote: rgba(14, 148, 131, 0.07);
+  --color-table-alt: rgba(28, 48, 71, 0.04);
+}
+
+/* ---------- Base element styling ---------- */
+ul, ol { list-style: none; }
+
+a { color: var(--color-accent); }
+
+img, svg { vertical-align: middle; }
+
+h1, h2, h3, h4 { line-height: 1.3; }
+
+/* Custom scrollbars */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar);
+  border-radius: 6px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-scrollbar-hover); background-clip: content-box; }
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* ---------- Accessibility helpers ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden { display: none !important; }
+
+.visually-hidden { visibility: hidden; }
+
+[hidden] { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

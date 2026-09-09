@@ -1,0 +1,12 @@
+{
+  "name": "text-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Framework-free bilingual (EN/AR) text editor with a built-in AI assistant. No build step — open index.html.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node tests/smoke.mjs",
+    "check": "node tests/syntax-check.mjs"
+  }
+}
